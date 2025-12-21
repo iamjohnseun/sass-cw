@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Dashboard - PhotoShare</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">PhotoShare</h1>
+                <span class="badge">Creator</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="btn-text">← Back to Gallery</a>
+                <div id="user-menu" class="user-menu">
+                    <img id="user-avatar" class="avatar" src="" alt="User">
+                    <span id="user-name"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Creator Dashboard</h2>
+                <button class="btn btn-primary" onclick="showUploadModal()">+ Upload Photo</button>
+            </div>
+
+            <!-- My Photos -->
+            <div class="my-photos-section">
+                <h3>My Photos</h3>
+                <div id="my-photos-grid" class="photo-grid">
+                    <!-- Creator's photos will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="closeUploadModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeUploadModal()">&times;</button>
+            <div class="modal-body">
+                <h2>Upload Photo</h2>
+                <form id="upload-form" onsubmit="handleUpload(event)">
+                    <div class="form-group">
+                        <label for="photo-file">Select Photo</label>
+                        <input type="file" id="photo-file" accept="image/*" required>
+                        <div id="preview-container" class="preview-container hidden">
+                            <img id="preview-image" src="" alt="Preview">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photo-title">Title *</label>
+                        <input type="text" id="photo-title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photo-caption">Caption</label>
+                        <textarea id="photo-caption" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photo-location">Location</label>
+                        <input type="text" id="photo-location" placeholder="e.g., London, UK">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="closeEditModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            <div class="modal-body">
+                <h2>Edit Photo</h2>
+                <form id="edit-form" onsubmit="handleEdit(event)">
+                    <input type="hidden" id="edit-photo-id">
+                    
+                    <div class="form-group">
+                        <label for="edit-title">Title *</label>
+                        <input type="text" id="edit-title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-caption">Caption</label>
+                        <textarea id="edit-caption" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-location">Location</label>
+                        <input type="text" id="edit-location">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/creator.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PhotoShare</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1 class="logo">PhotoShare</h1>
+                <span class="badge badge-admin">Admin</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="btn-text">← Back to Gallery</a>
+                <div id="user-menu" class="user-menu">
+                    <img id="user-avatar" class="avatar" src="" alt="User">
+                    <span id="user-name"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="total-photos">0</h3>
+                    <p>Total Photos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-users">0</h3>
+                    <p>Total Users</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-views">0</h3>
+                    <p>Total Views</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-likes">0</h3>
+                    <p>Total Likes</p>
+                </div>
+            </div>
+
+            <!-- All Photos Management -->
+            <div class="management-section">
+                <h3>Manage All Photos</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Preview</th>
+                                <th>Title</th>
+                                <th>Creator</th>
+                                <th>Views</th>
+                                <th>Likes</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="photos-table-body">
+                            <!-- Table rows will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="management-section">
+                <h3>Manage Users</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Table rows will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
