@@ -26,9 +26,8 @@ jobs:
     - name: 'Install dependencies'
       shell: bash
       run: |
-        cd backend
+        cd backend/functions
         npm install
-        npm run build --if-present
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
