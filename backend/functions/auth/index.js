@@ -2,7 +2,7 @@ const { app } = require('@azure/functions');
 const { verifyGoogleToken } = require('../utils/auth');
 const { query, execute } = require('../utils/db');
 
-module.exports = app.http('googleAuth', {
+app.http('googleAuth', {
   methods: ['POST'],
   authLevel: 'anonymous',
   route: 'auth/google',

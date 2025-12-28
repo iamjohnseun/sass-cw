@@ -75,6 +75,12 @@ async function handleGoogleSignIn(response) {
         currentUser = data.user;
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         updateUIForLoggedInUser();
+        
+        // Show creator request button if consumer
+        if (typeof showCreatorAccessButton === 'function') {
+            showCreatorAccessButton();
+        }
+        
         showNotification('Successfully signed in!', 'success');
         
         // Reload photos if on main page
@@ -91,8 +97,9 @@ async function handleGoogleSignIn(response) {
 function updateUIForLoggedInUser() {
     const authSection = document.getElementById('auth-section');
     const userMenu = document.getElementById('user-menu');
-    const creatorSection = document.getElementById('creator-section');
-    const adminSection = document.getElementById('admin-section');
+    const roleLinks = document.getElementById('role-links');
+    const creatorLink = document.getElementById('creator-link');
+    const adminLink = document.getElementById('admin-link');
     
     if (authSection && userMenu && currentUser) {
         authSection.classList.add('hidden');
@@ -101,11 +108,18 @@ function updateUIForLoggedInUser() {
         document.getElementById('user-avatar').src = currentUser.picture || '';
         document.getElementById('user-name').textContent = currentUser.name || currentUser.email || 'User';
         
-        if (creatorSection && currentUser.role === 'creator') {
-            creatorSection.classList.remove('hidden');
-        }
-        if (adminSection && currentUser.role === 'admin') {
-            adminSection.classList.remove('hidden');
+        // Show role-based links
+        if (roleLinks) {
+            const isCreator = currentUser.role === 'creator';
+            const isAdmin = currentUser.role === 'admin';
+            
+            if (isCreator || isAdmin) {
+                roleLinks.classList.remove('hidden');
+                if (creatorLink) creatorLink.style.display = isCreator ? 'inline-block' : 'none';
+                if (adminLink) adminLink.style.display = isAdmin ? 'inline-block' : 'none';
+            } else {
+                roleLinks.classList.add('hidden');
+            }
         }
     }
 }
@@ -117,16 +131,14 @@ function logout() {
     
     const authSection = document.getElementById('auth-section');
     const userMenu = document.getElementById('user-menu');
-    const creatorSection = document.getElementById('creator-section');
-    const adminSection = document.getElementById('admin-section');
+    const roleLinks = document.getElementById('role-links');
     
     if (authSection && userMenu) {
         authSection.classList.remove('hidden');
         userMenu.classList.add('hidden');
     }
     
-    if (creatorSection) creatorSection.classList.add('hidden');
-    if (adminSection) adminSection.classList.add('hidden');
+    if (roleLinks) roleLinks.classList.add('hidden');
     
     showNotification('Logged out successfully', 'success');
 }

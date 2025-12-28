@@ -1,7 +1,7 @@
 const { app } = require('@azure/functions');
 const { query } = require('../utils/db');
 
-module.exports = app.http('getPhotos', {
+app.http('getPhotos', {
   methods: ['GET'],
   authLevel: 'anonymous',
   route: 'photos',

@@ -18,6 +18,10 @@
                 <h1 class="logo">PhotoShare</h1>
             </div>
             <div class="nav-menu">
+                <div id="role-links" class="role-links hidden">
+                    <a href="creator.html" class="btn-text" id="creator-link">Creator Dashboard</a>
+                    <a href="admin.html" class="btn-text" id="admin-link">Admin Dashboard</a>
+                </div>
                 <div id="auth-section">
                     <div id="g_id_onload"
                          data-client_id="457435627216-dpas7vihtrci2617og99aqu07pikb693.apps.googleusercontent.com"
@@ -34,6 +38,7 @@
                 <div id="user-menu" class="user-menu hidden">
                     <img id="user-avatar" class="avatar" src="" alt="User">
                     <span id="user-name"></span>
+                    <button id="request-creator-btn" class="btn-text" style="display:none;">Request Creator Access</button>
                     <button id="sign-out-btn" class="btn-text">Sign Out</button>
                 </div>
             </div>
@@ -78,6 +83,22 @@
                             <button id="submit-comment" class="btn-primary" onclick="submitComment()">Post Comment</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="creator-request-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="modal-close" onclick="closeCreatorRequestModal()">&times;</span>
+            <div clacreator-request.js"></script>
+    <script src="js/ss="modal-body">
+                <h2>Request Creator Access</h2>
+                <p>Tell us why you'd like to become a creator:</p>
+                <textarea id="request-reason" placeholder="I want to share my photography portfolio..." rows="5" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit;"></textarea>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="closeCreatorRequestModal()">Cancel</button>
+                    <button class="btn btn-primary" id="submit-creator-request">Submit Request</button>
                 </div>
             </div>
         </div>
