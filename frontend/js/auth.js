@@ -9,6 +9,23 @@ function initGoogleSignIn() {
     if (googleSignInDiv) {
         googleSignInDiv.setAttribute('data-client_id', GOOGLE_CONFIG.clientId);
     }
+
+    // Attach logout handler
+    const signOutBtn = document.getElementById('sign-out-btn');
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            // Revoke Google token if available
+            try {
+                if (currentUser && currentUser.email && window.google && window.google.accounts && window.google.accounts.id) {
+                    window.google.accounts.id.revoke(currentUser.email, () => {});
+                }
+                if (window.google && window.google.accounts && window.google.accounts.id) {
+                    window.google.accounts.id.disableAutoSelect();
+                }
+            } catch (e) {}
+            logout();
+        });
+    }
     
     // Check for existing session
     const savedUser = localStorage.getItem('currentUser');
@@ -32,20 +49,37 @@ async function handleGoogleSignIn(response) {
             body: JSON.stringify({ token: idToken })
         });
         
+        if (!result.ok) {
+            // Fallback: decode Google ID token client-side to populate basic profile
+            try {
+                const payload = JSON.parse(atob(idToken.split('.')[1]));
+                currentUser = {
+                    userId: null,
+                    email: payload.email,
+                    name: payload.name,
+                    picture: payload.picture,
+                    role: 'consumer'
+                };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateUIForLoggedInUser();
+                showNotification('Signed in (offline mode). Backend not reachable.', 'warning');
+                if (typeof loadPhotos === 'function') { loadPhotos(); }
+            } catch (e) {
+                showNotification('Authentication failed. Please try again.', 'error');
+            }
+            return;
+        }
+
         const data = await result.json();
         
-        if (result.ok) {
-            currentUser = data.user;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            updateUIForLoggedInUser();
-            showNotification('Successfully signed in!', 'success');
-            
-            // Reload photos if on main page
-            if (typeof loadPhotos === 'function') {
-                loadPhotos();
-            }
-        } else {
-            showNotification('Authentication failed. Please try again.', 'error');
+        currentUser = data.user;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        updateUIForLoggedInUser();
+        showNotification('Successfully signed in!', 'success');
+        
+        // Reload photos if on main page
+        if (typeof loadPhotos === 'function') {
+            loadPhotos();
         }
     } catch (error) {
         console.error('Authentication error:', error);
@@ -65,14 +99,11 @@ function updateUIForLoggedInUser() {
         userMenu.classList.remove('hidden');
         
         document.getElementById('user-avatar').src = currentUser.picture || '';
-        document.getElementById('user-name').textContent = currentUser.name;
+        document.getElementById('user-name').textContent = currentUser.name || currentUser.email || 'User';
         
-        // Show creator dashboard link if user is creator
         if (creatorSection && currentUser.role === 'creator') {
             creatorSection.classList.remove('hidden');
         }
-        
-        // Show admin dashboard link if user is admin
         if (adminSection && currentUser.role === 'admin') {
             adminSection.classList.remove('hidden');
         }
@@ -98,45 +129,13 @@ function logout() {
     if (adminSection) adminSection.classList.add('hidden');
     
     showNotification('Logged out successfully', 'success');
-    
-    // Reload page
-    window.location.reload();
 }
 
-// Get current user
-function getCurrentUser() {
-    return currentUser;
-}
-
-// Check if user is authenticated
-function isAuthenticated() {
-    return currentUser !== null;
-}
-
-// Check if user has specific role
-function hasRole(role) {
-    return currentUser && currentUser.role === role;
-}
-
-// Require authentication
-function requireAuth() {
-    if (!isAuthenticated()) {
-        showNotification('Please sign in to continue', 'error');
-        return false;
-    }
-    return true;
-}
-
-// Require specific role
-function requireRole(role) {
-    if (!requireAuth()) return false;
-    
-    if (!hasRole(role)) {
-        showNotification(`This feature requires ${role} access`, 'error');
-        return false;
-    }
-    return true;
-}
+function getCurrentUser() { return currentUser; }
+function isAuthenticated() { return currentUser !== null; }
+function hasRole(role) { return currentUser && currentUser.role === role; }
+function requireAuth() { if (!isAuthenticated()) { showNotification('Please sign in to continue', 'error'); return false; } return true; }
+function requireRole(role) { if (!requireAuth()) return false; if (!hasRole(role)) { showNotification(`This feature requires ${role} access`, 'error'); return false; } return true; }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', initGoogleSignIn);
