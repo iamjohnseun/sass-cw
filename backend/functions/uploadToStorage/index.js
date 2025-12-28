@@ -1,8 +1,7 @@
 const { app } = require('@azure/functions');
-const { uploadPhoto, deletePhoto } = require('./utils/storage');
+const { uploadPhoto } = require('../utils/storage');
 const multipart = require('parse-multipart');
 
-// Upload photo to blob storage
 app.http('uploadToStorage', {
   methods: ['POST'],
   authLevel: 'anonymous',
@@ -33,7 +32,6 @@ app.http('uploadToStorage', {
       const fileName = `${Date.now()}-${filePart.filename}`;
       const mimeType = filePart.type;
 
-      // Validate file type
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
       if (!allowedTypes.includes(mimeType)) {
         return {
@@ -42,7 +40,6 @@ app.http('uploadToStorage', {
         };
       }
 
-      // Validate file size (max 10MB)
       const maxSize = 10 * 1024 * 1024;
       if (filePart.data.length > maxSize) {
         return {
@@ -70,35 +67,6 @@ app.http('uploadToStorage', {
       return {
         status: 500,
         body: JSON.stringify({ error: 'Failed to upload file' })
-      };
-    }
-  }
-});
-
-// Delete photo from blob storage
-app.http('deleteFromStorage', {
-  methods: ['DELETE'],
-  authLevel: 'anonymous',
-  route: 'storage/{fileName}',
-  handler: async (request, context) => {
-    try {
-      const fileName = request.params.fileName;
-
-      await deletePhoto(fileName);
-
-      return {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        body: JSON.stringify({ message: 'File deleted successfully' })
-      };
-    } catch (err) {
-      context.error('Delete error:', err);
-      return {
-        status: 500,
-        body: JSON.stringify({ error: 'Failed to delete file' })
       };
     }
   }
