@@ -1,5 +1,5 @@
 const { app } = require('@azure/functions');
-const { query, execute } = require('../utils/db');
+const { query, execute } = require('./utils/db');
 
 // Like a photo
 app.http('likePhoto', {

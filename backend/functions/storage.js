@@ -1,5 +1,5 @@
 const { app } = require('@azure/functions');
-const { uploadPhoto, deletePhoto } = require('../utils/storage');
+const { uploadPhoto, deletePhoto } = require('./utils/storage');
 const multipart = require('parse-multipart');
 
 // Upload photo to blob storage

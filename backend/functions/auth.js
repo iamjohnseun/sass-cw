@@ -1,6 +1,6 @@
 const { app } = require('@azure/functions');
-const { verifyGoogleToken } = require('../utils/auth');
-const { query, execute } = require('../utils/db');
+const { verifyGoogleToken } = require('./utils/auth');
+const { query, execute } = require('./utils/db');
 
 // Google Sign-In
 app.http('googleAuth', {

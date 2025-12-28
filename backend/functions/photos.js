@@ -1,5 +1,5 @@
 const { app } = require('@azure/functions');
-const { query, execute } = require('../utils/db');
+const { query, execute } = require('./utils/db');
 
 // Get all photos (consumer view)
 app.http('getPhotos', {
