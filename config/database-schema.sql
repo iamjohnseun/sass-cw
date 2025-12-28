@@ -31,18 +31,18 @@ CREATE TABLE [dbo].[Photos] (
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([UserId]) ON DELETE CASCADE
 );
 
--- Likes Table
+-- Likes Table (updated: UserId changed to NO ACTION to avoid cascade path issues)
 CREATE TABLE [dbo].[Likes] (
     [LikeId] INT IDENTITY(1,1) PRIMARY KEY,
     [PhotoId] INT NOT NULL,
     [UserId] INT NOT NULL,
     [CreatedAt] DATETIME2 DEFAULT GETUTCDATE(),
     FOREIGN KEY ([PhotoId]) REFERENCES [dbo].[Photos]([PhotoId]) ON DELETE CASCADE,
-    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([UserId]) ON DELETE CASCADE,
+    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([UserId]) ON DELETE NO ACTION,
     UNIQUE ([PhotoId], [UserId])
 );
 
--- Comments Table
+-- Comments Table (updated: UserId changed to NO ACTION to avoid cascade path issues)
 CREATE TABLE [dbo].[Comments] (
     [CommentId] INT IDENTITY(1,1) PRIMARY KEY,
     [PhotoId] INT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE [dbo].[Comments] (
     [CreatedAt] DATETIME2 DEFAULT GETUTCDATE(),
     [UpdatedAt] DATETIME2 DEFAULT GETUTCDATE(),
     FOREIGN KEY ([PhotoId]) REFERENCES [dbo].[Photos]([PhotoId]) ON DELETE CASCADE,
-    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([UserId]) ON DELETE CASCADE
+    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([UserId]) ON DELETE NO ACTION
 );
 
 -- Tags Table (for categorizing photos)
@@ -60,13 +60,13 @@ CREATE TABLE [dbo].[Tags] (
     [TagName] NVARCHAR(100) NOT NULL UNIQUE
 );
 
--- Photo_Tags Junction Table
+-- Photo_Tags Junction Table (updated: TagId changed to NO ACTION to avoid cascade path issues)
 CREATE TABLE [dbo].[Photo_Tags] (
     [PhotoId] INT NOT NULL,
     [TagId] INT NOT NULL,
     PRIMARY KEY ([PhotoId], [TagId]),
     FOREIGN KEY ([PhotoId]) REFERENCES [dbo].[Photos]([PhotoId]) ON DELETE CASCADE,
-    FOREIGN KEY ([TagId]) REFERENCES [dbo].[Tags]([TagId]) ON DELETE CASCADE
+    FOREIGN KEY ([TagId]) REFERENCES [dbo].[Tags]([TagId]) ON DELETE NO ACTION
 );
 
 -- Create Indexes for Performance
