@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: 'your-function-app-name'
+  AZURE_FUNCTIONAPP_NAME: 'photoshare-func-123'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/functions'
-  NODE_VERSION: '18.x'
+  NODE_VERSION: '22.x'
 
 jobs:
   build-and-deploy:
