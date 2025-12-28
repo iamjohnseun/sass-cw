@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhotoShare - Scalable Photo Distribution Platform</title>
-    
+    <title>PhotoShare</title>
+
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
@@ -27,18 +22,16 @@
                     <div id="g_id_onload"
                          data-client_id="${GOOGLE_CLIENT_ID}"
                          data-callback="handleGoogleSignIn"
-                         data-auto_prompt="false">
-                    </div>
+                         data-auto_prompt="false"></div>
                     <div class="g_id_signin"
                          data-type="standard"
                          data-shape="rectangular"
                          data-theme="outline"
                          data-text="signin_with"
                          data-size="large"
-                         data-logo_alignment="left">
-                    </div>
+                         data-logo_alignment="left"></div>
                 </div>
-                <div id="user-menu" class="user-menu" style="display: none;">
+                <div id="user-menu" class="user-menu hidden">
                     <img id="user-avatar" class="avatar" src="" alt="User">
                     <span id="user-name"></span>
                     <button id="sign-out-btn" class="btn-text">Sign Out</button>
@@ -47,87 +40,42 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <main class="main-content">
         <div class="container">
-            <div class="hero-content">
-                <h2 class="hero-title">Discover & Share</h2>
-                <p class="hero-subtitle">A scalable platform for photo enthusiasts</p>
-            </div>
+            <div id="photo-grid" class="photo-grid"></div>
+            <div id="loading" class="loading hidden"><div class="spinner"></div></div>
+            <div id="pagination" class="pagination"></div>
         </div>
-    </section>
+    </main>
 
-    <!-- Filters -->
-    <section class="filters">
-        <div class="container">
-            <div class="filter-group">
-                <input type="text" id="search-input" class="search-input" placeholder="Search photos by tags...">
-                <select id="sort-select" class="select">
-                    <option value="recent">Most Recent</option>
-                    <option value="popular">Most Popular</option>
-                    <option value="likes">Most Liked</option>
-                </select>
-            </div>
-        </div>
-    </section>
-
-    <!-- Photo Gallery -->
-    <section class="gallery">
-        <div class="container">
-            <div id="photo-grid" class="photo-grid">
-                <!-- Photos will be loaded here dynamically -->
-            </div>
-            
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
-            </div>
-            
-            <div id="empty-state" class="empty-state" style="display: none;">
-                <p>No photos found. Be the first to share!</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Photo Modal -->
-    <div id="photo-modal" class="modal">
+    <div id="photo-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close" onclick="closePhotoModal()">&times;</span>
             <div class="modal-body">
                 <div class="modal-image-container">
                     <img id="modal-image" src="" alt="">
                 </div>
                 <div class="modal-details">
-                    <div class="modal-header">
-                        <div class="user-info">
-                            <img id="modal-user-avatar" class="avatar" src="" alt="">
-                            <div>
-                                <h3 id="modal-user-name"></h3>
-                                <p id="modal-upload-date" class="text-muted"></p>
-                            </div>
-                        </div>
+                    <h3 id="modal-title"></h3>
+                    <p id="modal-caption"></p>
+                    <p id="modal-location" class="text-muted"></p>
+                    <div class="modal-meta">
+                        <img id="modal-creator-avatar" class="avatar" src="" alt="">
+                        <span id="modal-creator-name"></span>
+                        <span id="modal-views"></span>
+                        <span id="modal-likes"></span>
                     </div>
-                    
-                    <div class="modal-description">
-                        <p id="modal-description"></p>
-                    </div>
-                    
-                    <div class="modal-tags">
-                        <div id="modal-tags-list"></div>
-                    </div>
-                    
                     <div class="modal-actions">
-                        <button id="like-btn" class="btn-icon">
-                            <span class="icon">❤️</span>
-                            <span id="like-count">0</span>
+                        <button class="btn-icon" onclick="toggleLike()">
+                            <span id="like-icon">🤍</span>
                         </button>
                     </div>
-                    
                     <div class="modal-comments">
                         <h4>Comments</h4>
                         <div id="comments-list" class="comments-list"></div>
-                        <div id="comment-form" class="comment-form" style="display: none;">
+                        <div id="comment-form" class="comment-form hidden">
                             <textarea id="comment-input" placeholder="Add a comment..." rows="3"></textarea>
-                            <button id="submit-comment" class="btn-primary">Post Comment</button>
+                            <button id="submit-comment" class="btn-primary" onclick="submitComment()">Post Comment</button>
                         </div>
                     </div>
                 </div>
