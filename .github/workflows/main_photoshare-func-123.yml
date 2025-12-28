@@ -41,6 +41,17 @@ jobs:
       with:
         azcliversion: 2.50.0
         inlineScript: |
+          # Create config.js from template
+          sed "s|\${AZURE_FUNCTIONS_URL}|https://${{ env.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api|g" \
+              frontend/js/config.template.js | \
+          sed "s|\${GOOGLE_CLIENT_ID}|${{ secrets.GOOGLE_CLIENT_ID }}|g" \
+              > frontend/js/config.js
+          
+          # Create index.html from template
+          sed "s|\${GOOGLE_CLIENT_ID}|${{ secrets.GOOGLE_CLIENT_ID }}|g" \
+            frontend/index.template.html > frontend/index.html
+          
+          # Deploy to Azure Storage
           az storage blob upload-batch \
             --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} \
             --account-key ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }} \

@@ -10,6 +10,10 @@ yarn-error.log*
 .env.production
 local.settings.json
 
+# Frontend config with secrets
+frontend/js/config.js
+frontend/index.html
+
 # Azure Functions
 bin/
 obj/
@@ -54,3 +58,10 @@ Thumbs.db
 *.key
 secrets/
 credentials/
+.gitignore
+*.md
+*.sh
+backend/functions/local.settings.json
+config/.env.example
+config/azure-functions-config.json
+config/photoshare-func-123.PublishSettings

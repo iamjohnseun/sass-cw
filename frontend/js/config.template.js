@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
     // Update this with your Azure Functions URL
-    baseUrl: 'https://photoshare-func-123.azurewebsites.net/api',
+    baseUrl: '${AZURE_FUNCTIONS_URL}',
     
     // Or for local development:
     // baseUrl: 'http://localhost:7071/api',
@@ -33,7 +33,7 @@ const API_CONFIG = {
 // Google OAuth Configuration
 const GOOGLE_CONFIG = {
     // Update this with your Google Client ID
-    clientId: '457435627216-dpas7vihtrci2617og99aqu07pikb693.apps.googleusercontent.com'
+    clientId: '${GOOGLE_CLIENT_ID}'
 };
 
 // App Configuration
