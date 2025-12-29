@@ -1,11 +1,11 @@
 {
-  "version": "2.0",
+  "scriptFile": "index.js",
   "bindings": [
     {
       "authLevel": "anonymous",
       "type": "httpTrigger",
       "direction": "in",
-      "name": "request",
+      "name": "req",
       "methods": ["post"],
       "route": "auth/google"
     },
