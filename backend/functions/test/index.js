@@ -1,5 +1,5 @@
 module.exports = async function (context, req) {
-  return {
+  context.res = {
     status: 200,
     body: JSON.stringify({
       message: 'Test endpoint working',
