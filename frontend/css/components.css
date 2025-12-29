@@ -201,6 +201,72 @@
     content: "📍 ";
 }
 
+.modal-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+.modal-location::before {
+    content: "📍";
+}
+
+.modal-meta {
+    margin: var(--spacing-md) 0;
+}
+
+.modal-author-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.modal-author-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.meta-separator {
+    color: var(--text-light);
+}
+
+.modal-meta-pill {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.like-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: var(--bg-secondary);
+    border: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all 0.15s ease;
+}
+
+.like-chip:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.like-chip.liked {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: var(--danger-color);
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: var(--spacing-lg) 0;
+}
+
 .action-buttons {
     display: flex;
     gap: var(--spacing-md);
@@ -225,6 +291,7 @@
     margin-bottom: var(--spacing-md);
     background-color: var(--bg-secondary);
     border-radius: var(--radius-md);
+    position: relative;
 }
 
 .comment-header {
@@ -247,6 +314,35 @@
 .comment-text {
     color: var(--text-secondary);
     line-height: 1.6;
+}
+
+.comment-delete-btn {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: var(--shadow-xs, 0 1px 3px rgba(0,0,0,0.08));
+}
+
+.comment-delete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.comment-submit {
+    align-self: flex-end;
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: var(--radius-md);
 }
 
 .comment-form textarea {
