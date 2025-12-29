@@ -3,6 +3,7 @@
 let currentPage = 1;
 let currentSearch = '';
 let currentPhotoId = null;
+let currentPhotoOwnerId = null;
 
 // Load photos
 async function loadPhotos(page = 1, search = '') {
@@ -141,15 +142,20 @@ async function openPhotoModal(photoId) {
         const photo = data.photo;
         const comments = data.comments || [];
         
+        currentPhotoOwnerId = photo.UserId;
+
         // Update modal content
         document.getElementById('modal-image').src = photo.ImageUrl;
         document.getElementById('modal-title').textContent = photo.Title;
         document.getElementById('modal-caption').textContent = photo.Caption || '';
-        document.getElementById('modal-location').textContent = photo.Location || '';
+        document.getElementById('modal-location').textContent = photo.Location || 'Unknown location';
         document.getElementById('modal-creator-avatar').src = photo.CreatorPicture || '';
         document.getElementById('modal-creator-name').textContent = photo.CreatorName;
         document.getElementById('modal-views').textContent = `👁️ ${photo.Views} views`;
-        document.getElementById('modal-likes').textContent = `❤️ ${photo.Likes} likes`;
+
+        const likeButton = document.getElementById('like-button');
+        likeButton.textContent = `🤍 ${photo.Likes}`;
+        likeButton.classList.remove('liked');
         
         // Display comments
         displayComments(comments);
@@ -174,6 +180,7 @@ function closePhotoModal() {
     const modal = document.getElementById('photo-modal');
     modal.classList.add('hidden');
     currentPhotoId = null;
+    currentPhotoOwnerId = null;
 }
 
 // Toggle like
@@ -183,15 +190,13 @@ async function toggleLike() {
     try {
         const user = getCurrentUser();
         const result = await PhotoAPI.likePhoto(currentPhotoId, user.userId);
-        
-        // Update UI
-        const likeIcon = document.getElementById('like-icon');
-        likeIcon.textContent = result.liked ? '❤️' : '🤍';
-        
-        // Refresh photo details
+
+        // Refresh photo details for accurate counts
         const data = await PhotoAPI.getPhoto(currentPhotoId);
-        document.getElementById('modal-likes').textContent = `❤️ ${data.photo.Likes} likes`;
-        
+        const likeButton = document.getElementById('like-button');
+        likeButton.textContent = `${result.liked ? '❤️' : '🤍'} ${data.photo.Likes}`;
+        likeButton.classList.toggle('liked', result.liked);
+
         showNotification(result.message, 'success');
     } catch (error) {
         console.error('Error toggling like:', error);
@@ -202,13 +207,16 @@ async function toggleLike() {
 // Display comments
 function displayComments(comments) {
     const commentsList = document.getElementById('comments-list');
+    const user = getCurrentUser();
     
     if (comments.length === 0) {
         commentsList.innerHTML = '<p class="text-center" style="color: var(--text-light);">No comments yet. Be the first to comment!</p>';
         return;
     }
     
-    commentsList.innerHTML = comments.map(comment => `
+    commentsList.innerHTML = comments.map(comment => {
+        const canDelete = user && (comment.UserId === user.userId || currentPhotoOwnerId === user.userId || user.role === 'admin');
+        return `
         <div class="comment">
             <div class="comment-header">
                 <img src="${comment.UserPicture || ''}" alt="${comment.UserName}" class="avatar-small">
@@ -216,8 +224,23 @@ function displayComments(comments) {
                 <span class="comment-date">${formatDate(comment.CreatedAt)}</span>
             </div>
             <p class="comment-text">${comment.Text}</p>
-        </div>
-    `).join('');
+            ${canDelete ? `<button class="comment-delete-btn" aria-label="Delete comment" onclick="deleteComment(${comment.CommentId})">🗑️</button>` : ''}
+        </div>`;
+    }).join('');
+}
+
+async function deleteComment(commentId) {
+    if (!requireAuth()) return;
+    try {
+        const user = getCurrentUser();
+        await PhotoAPI.deleteComment(commentId, user.userId);
+        const data = await PhotoAPI.getPhoto(currentPhotoId);
+        displayComments(data.comments || []);
+        showNotification('Comment deleted', 'success');
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        showNotification('Failed to delete comment', 'error');
+    }
 }
 
 // Submit comment
