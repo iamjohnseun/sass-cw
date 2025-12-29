@@ -6,8 +6,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["post"],
-      "route": "users/request-creator"
+      "methods": ["get"],
+      "route": "auth/user/{id}"
     },
     {
       "type": "http",

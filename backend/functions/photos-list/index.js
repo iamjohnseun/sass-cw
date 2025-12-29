@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
         p.CreatedAt, p.UpdatedAt,
         u.Name as CreatorName, u.ProfilePicture as CreatorPicture
       FROM Photos p
-      LEFT JOIN Users u ON p.UserId = u.UserId
+      INNER JOIN Users u ON p.UserId = u.UserId
       WHERE p.IsPublished = 1
     `;
 
@@ -35,34 +35,33 @@ module.exports = async function (context, req) {
       countQuery += ` AND (p.Title LIKE @search OR p.Caption LIKE @search OR p.Location LIKE @search)`;
     }
     const countResult = await query(countQuery, { search: `%${searchTerm}%` });
-    const total = (countResult && countResult[0]) ? countResult[0].total : 0;
+    const total = countResult[0].total;
 
     context.res = {
       status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({
-        photos: photos || [],
+        photos,
         pagination: {
           page,
           limit,
           total,
-          totalPages: Math.ceil(total / limit) || 0
+          totalPages: Math.ceil(total / limit)
         }
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      })
     };
   } catch (err) {
     context.log.error('Error fetching photos:', err);
     context.res = {
       status: 500,
-      body: JSON.stringify({
-        error: 'Failed to fetch photos',
-        details: err.message
-      }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ error: 'Failed to fetch photos' })
     };
   }
 };

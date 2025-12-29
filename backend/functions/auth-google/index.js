@@ -3,7 +3,19 @@ const { query, execute } = require('../utils/db');
 
 module.exports = async function (context, req) {
   try {
-    const { token } = req.body;
+    const { token } = req.body || {};
+
+    if (!token) {
+      context.res = {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({ error: 'Token is required' })
+      };
+      return;
+    }
 
     const googleUser = await verifyGoogleToken(token);
 
@@ -32,6 +44,10 @@ module.exports = async function (context, req) {
 
     context.res = {
       status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({
         user: {
           userId: user.UserId,
@@ -41,23 +57,17 @@ module.exports = async function (context, req) {
           role: user.Role
         },
         message: 'Authentication successful'
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      })
     };
   } catch (err) {
-    context.log.error('Auth error:', err);
+    context.log.error('Authentication error:', err);
     context.res = {
       status: 401,
-      body: JSON.stringify({
-        error: 'Authentication failed',
-        details: err.message
-      }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ error: 'Authentication failed' })
     };
   }
 };
-

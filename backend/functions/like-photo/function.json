@@ -1,5 +1,4 @@
 {
-  "scriptFile": "index.js",
   "bindings": [
     {
       "authLevel": "anonymous",
@@ -7,12 +6,13 @@
       "direction": "in",
       "name": "req",
       "methods": ["post"],
-      "route": "users/request-creator"
+      "route": "photos/{id}/like"
     },
     {
       "type": "http",
       "direction": "out",
       "name": "res"
     }
-  ]
+  ],
+  "scriptFile": "index.js"
 }

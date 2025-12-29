@@ -11,7 +11,8 @@ module.exports = async function (context, req) {
           error: 'User ID is required'
         }),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       };
       return;
@@ -33,7 +34,8 @@ module.exports = async function (context, req) {
           error: 'User not found'
         }),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       };
       return;
@@ -56,7 +58,8 @@ module.exports = async function (context, req) {
         }
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     };
   } catch (err) {
@@ -68,7 +71,8 @@ module.exports = async function (context, req) {
         details: err.message
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     };
   }
