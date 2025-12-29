@@ -126,8 +126,8 @@
 
 .modal-close {
     position: absolute;
-    top: var(--spacing-lg);
-    right: var(--spacing-lg);
+    top: 3rem;
+    right: 3rem;
     background: none;
     border: none;
     font-size: 2rem;
@@ -206,7 +206,12 @@
     align-items: center;
     gap: 0.35rem;
     font-size: 0.95rem;
-    color: var(--text-light);
+    background-color: var(--bg-secondary);
+    border: none;
+    padding: 0.45rem 0.55rem;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-primary);
 }
 
 .modal-location::before {
