@@ -35,7 +35,7 @@ module.exports = async function (context, req) {
 
       const comments = await query(
         `SELECT 
-          c.CommentId, c.Text, c.CreatedAt,
+          c.CommentId, c.Text, c.CreatedAt, c.UserId,
           u.Name as UserName, u.ProfilePicture as UserPicture
         FROM Comments c
         INNER JOIN Users u ON c.UserId = u.UserId
