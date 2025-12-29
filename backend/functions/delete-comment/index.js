@@ -18,7 +18,7 @@ module.exports = async function (context, req) {
     }
 
     const comments = await query(
-      'SELECT CommentId, UserId FROM Comments WHERE CommentId = @commentId',
+      'SELECT CommentId, UserId, PhotoId FROM Comments WHERE CommentId = @commentId',
       { commentId }
     );
 
@@ -39,6 +39,11 @@ module.exports = async function (context, req) {
       { userId }
     );
 
+    const photos = await query(
+      'SELECT UserId FROM Photos WHERE PhotoId = @photoId',
+      { photoId: comments[0].PhotoId }
+    );
+
     if (users.length === 0) {
       context.res = {
         status: 404,
@@ -53,8 +58,9 @@ module.exports = async function (context, req) {
 
     const isOwner = comments[0].UserId === parseInt(userId, 10);
     const isAdmin = users[0].Role === 'admin';
+    const isPhotoAuthor = photos.length > 0 && photos[0].UserId === parseInt(userId, 10);
 
-    if (!isOwner && !isAdmin) {
+    if (!isOwner && !isAdmin && !isPhotoAuthor) {
       context.res = {
         status: 403,
         headers: {
