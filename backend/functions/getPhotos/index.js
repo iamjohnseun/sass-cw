@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
         p.CreatedAt, p.UpdatedAt,
         u.Name as CreatorName, u.ProfilePicture as CreatorPicture
       FROM Photos p
-      INNER JOIN Users u ON p.UserId = u.UserId
+      LEFT JOIN Users u ON p.UserId = u.UserId
       WHERE p.IsPublished = 1
     `;
 
@@ -35,17 +35,17 @@ module.exports = async function (context, req) {
       countQuery += ` AND (p.Title LIKE @search OR p.Caption LIKE @search OR p.Location LIKE @search)`;
     }
     const countResult = await query(countQuery, { search: `%${searchTerm}%` });
-    const total = countResult[0] ? countResult[0].total : 0;
+    const total = (countResult && countResult[0]) ? countResult[0].total : 0;
 
     context.res = {
       status: 200,
       body: JSON.stringify({
-        photos,
+        photos: photos || [],
         pagination: {
           page,
           limit,
           total,
-          totalPages: Math.ceil(total / limit)
+          totalPages: Math.ceil(total / limit) || 0
         }
       }),
       headers: {

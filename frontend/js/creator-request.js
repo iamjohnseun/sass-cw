@@ -36,53 +36,66 @@ async function requestCreatorAccess() {
         creatorRequestPending = true;
         const user = getCurrentUser();
 
-        // Store request in localStorage as a simple fallback
-        // In production, this would be sent to a backend endpoint
-        const requests = JSON.parse(localStorage.getItem('creatorRequests') || '{}');
-        if (!requests[user.email]) {
-            requests[user.email] = {
+        // Call backend API to auto-approve creator request
+        const response = await fetch(`${API_CONFIG.baseUrl}/users/request-creator`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 userId: user.userId,
-                email: user.email,
-                name: user.name,
-                reason: reason,
-                requestedAt: new Date().toISOString(),
-                status: 'pending'
-            };
-            localStorage.setItem('creatorRequests', JSON.stringify(requests));
+                reason: reason
+            })
+        });
 
-            showNotification('Creator access request submitted! An admin will review your request.', 'success');
+        const data = await response.json();
+
+        if (response.ok) {
+            // Update local user data with new creator role
+            const updatedUser = {
+                ...user,
+                role: 'creator'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+            
+            showNotification('Creator access granted! Redirecting to creator dashboard...', 'success');
             closeCreatorRequestModal();
             
             // Clear textarea
             if (reasonTextarea) {
                 reasonTextarea.value = '';
             }
+
+            // Update UI to show creator links
+            updateUIForLoggedInUser();
+            
+            // Redirect to creator dashboard after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'creator.html';
+            }, 2000);
         } else {
-            showNotification('You have already submitted a creator request. Please wait for admin review.', 'warning');
+            showNotification(data.error || 'Failed to grant creator access', 'error');
         }
     } catch (error) {
         console.error('Error submitting creator request:', error);
-        showNotification('Failed to submit creator request', 'error');
+        showNotification('Failed to submit creator request. Please try again.', 'error');
     } finally {
         creatorRequestPending = false;
     }
 }
 
-// Show creator access button (for consumers)
+// Show creator access button (for consumers only)
 function showCreatorAccessButton() {
     const btn = document.getElementById('request-creator-btn');
     const user = getCurrentUser();
     
-    if (btn && user && user.role === 'consumer') {
-        // Check if they have a pending request
-        const requests = JSON.parse(localStorage.getItem('creatorRequests') || '{}');
-        if (requests[user.email]) {
-            btn.textContent = `Creator Request Pending (${requests[user.email].status})`;
-            btn.disabled = true;
-        } else {
+    if (btn && user) {
+        if (user.role === 'consumer') {
             btn.textContent = 'Request Creator Access';
             btn.disabled = false;
             btn.style.display = 'inline-block';
+        } else {
+            btn.style.display = 'none';
         }
     }
 }
