@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
 
     let queryText = `
       SELECT 
-        p.PhotoId, p.Title, p.Caption, p.Location,
+        p.PhotoId, p.UserId, p.Title, p.Caption, p.Location,
         p.ImageUrl, p.ThumbnailUrl, p.Views, p.Likes,
         p.CreatedAt, p.UpdatedAt,
         u.Name as CreatorName, u.ProfilePicture as CreatorPicture
