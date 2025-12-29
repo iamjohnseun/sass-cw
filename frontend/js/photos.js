@@ -154,8 +154,10 @@ async function openPhotoModal(photoId) {
         document.getElementById('modal-views').textContent = `👁️ ${photo.Views} views`;
 
         const likeButton = document.getElementById('like-button');
-        likeButton.textContent = `🤍 ${photo.Likes}`;
-        likeButton.classList.remove('liked');
+        if (likeButton) {
+            likeButton.textContent = `🤍 ${photo.Likes}`;
+            likeButton.classList.remove('liked');
+        }
         
         // Display comments
         displayComments(comments);
@@ -194,8 +196,10 @@ async function toggleLike() {
         // Refresh photo details for accurate counts
         const data = await PhotoAPI.getPhoto(currentPhotoId);
         const likeButton = document.getElementById('like-button');
-        likeButton.textContent = `${result.liked ? '❤️' : '🤍'} ${data.photo.Likes}`;
-        likeButton.classList.toggle('liked', result.liked);
+        if (likeButton) {
+            likeButton.textContent = `${result.liked ? '❤️' : '🤍'} ${data.photo.Likes}`;
+            likeButton.classList.toggle('liked', result.liked);
+        }
 
         showNotification(result.message, 'success');
     } catch (error) {
@@ -237,6 +241,13 @@ async function deleteComment(commentId) {
         const data = await PhotoAPI.getPhoto(currentPhotoId);
         displayComments(data.comments || []);
         showNotification('Comment deleted', 'success');
+        
+        // Update like button/metrics after deletion refresh if available
+        const likeButton = document.getElementById('like-button');
+        if (likeButton && data.photo) {
+            likeButton.textContent = `${'🤍'} ${data.photo.Likes}`;
+            likeButton.classList.toggle('liked', false);
+        }
     } catch (error) {
         console.error('Error deleting comment:', error);
         showNotification('Failed to delete comment', 'error');
