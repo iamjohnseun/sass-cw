@@ -61,7 +61,7 @@ module.exports = async function (context, req) {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       },
-      body: JSON.stringify({ error: 'Failed to fetch photos' })
+      body: JSON.stringify({ error: 'Failed to fetch photos: ' + err.message })
     };
   }
 };
