@@ -4,9 +4,11 @@ const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 const containerName = process.env.AZURE_STORAGE_CONTAINER || 'photos';
 
+const { StorageSharedKeyCredential } = require('@azure/storage-blob');
+
 const blobServiceClient = new BlobServiceClient(
   `https://${accountName}.blob.core.windows.net`,
-  new require('@azure/storage-blob').StorageSharedKeyCredential(accountName, accountKey)
+  new StorageSharedKeyCredential(accountName, accountKey)
 );
 
 async function uploadPhoto(fileName, fileBuffer, mimeType) {
