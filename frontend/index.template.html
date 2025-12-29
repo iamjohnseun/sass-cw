@@ -63,24 +63,26 @@
                 <div class="modal-details">
                     <h3 id="modal-title"></h3>
                     <p id="modal-caption"></p>
-                    <p id="modal-location" class="text-muted"></p>
+                    <p id="modal-location" class="modal-location text-muted"></p>
+
                     <div class="modal-meta">
-                        <img id="modal-creator-avatar" class="avatar" src="" alt="">
-                        <span id="modal-creator-name"></span>
-                        <span id="modal-views"></span>
-                        <span id="modal-likes"></span>
+                        <div class="modal-author-row">
+                            <img id="modal-creator-avatar" class="avatar" src="" alt="">
+                            <span id="modal-creator-name" class="modal-author-name"></span>
+                            <span class="meta-separator">•</span>
+                            <span id="modal-views" class="modal-meta-pill"></span>
+                            <button id="like-button" class="like-chip" onclick="toggleLike()">🤍 0</button>
+                        </div>
                     </div>
-                    <div class="modal-actions">
-                        <button class="btn-icon" onclick="toggleLike()">
-                            <span id="like-icon">🤍</span>
-                        </button>
-                    </div>
+
+                    <div class="modal-divider"></div>
+
                     <div class="modal-comments">
                         <h4>Comments</h4>
                         <div id="comments-list" class="comments-list"></div>
                         <div id="comment-form" class="comment-form hidden">
                             <textarea id="comment-input" placeholder="Add a comment..." rows="3"></textarea>
-                            <button id="submit-comment" class="btn-primary" onclick="submitComment()">Post Comment</button>
+                            <button id="submit-comment" class="btn btn-primary comment-submit" onclick="submitComment()">Post Comment</button>
                         </div>
                     </div>
                 </div>
