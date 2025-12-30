@@ -134,9 +134,9 @@ img {
 
 .search-icon-btn {
     position: absolute;
-    left: 0;
-    width: 40px;
-    height: 40px;
+    left: 1px;
+    width: 39px;
+    height: 39px;
     border: none;
     background: var(--bg-secondary);
     border-radius: 50%;
