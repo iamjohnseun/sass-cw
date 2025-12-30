@@ -109,6 +109,75 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.nav-search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 500px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 50px;
+    transition: width 0.3s ease;
+}
+
+.search-container:hover,
+.search-container.expanded {
+    width: 100%;
+}
+
+.search-icon-btn {
+    position: absolute;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.search-icon-btn:hover {
+    background: var(--border-color);
+    transform: scale(1.05);
+}
+
+.nav-search-input {
+    width: 100%;
+    padding: 0.65rem 0.65rem 0.65rem 50px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-secondary);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.search-container:hover .nav-search-input,
+.search-container.expanded .nav-search-input {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.nav-search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: var(--bg-primary);
 }
 
 .nav-brand {
@@ -344,6 +413,32 @@ img {
     .navbar .container {
         flex-direction: column;
         gap: var(--spacing-md);
+    }
+
+    .nav-search {
+        order: 2;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .search-container {
+        width: 50px;
+        margin: 0 auto;
+    }
+
+    .search-container:hover,
+    .search-container.expanded {
+        width: 100%;
+    }
+
+    .nav-brand {
+        order: 1;
+    }
+
+    .nav-menu {
+        order: 3;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     
     h1 { font-size: 2rem; }

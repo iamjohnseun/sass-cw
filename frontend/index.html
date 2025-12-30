@@ -17,6 +17,20 @@
             <div class="nav-brand">
                 <h1 class="logo">PhotoShare</h1>
             </div>
+            <div class="nav-search">
+                <div class="search-container">
+                    <button class="search-icon-btn" id="search-toggle" aria-label="Search">
+                        🔍
+                    </button>
+                    <input 
+                        type="text" 
+                        id="nav-search-input" 
+                        class="nav-search-input" 
+                        placeholder="Search photos..."
+                        onkeypress="handleNavSearchKeyPress(event)"
+                    >
+                </div>
+            </div>
             <div class="nav-menu">
                 <div id="role-links" class="role-links hidden">
                     <a href="creator.html" class="btn-text" id="creator-link">Creator Dashboard</a>

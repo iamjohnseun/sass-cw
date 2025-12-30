@@ -132,6 +132,15 @@ function handleSearchKeyPress(event) {
     }
 }
 
+// Handle navbar search on Enter key
+function handleNavSearchKeyPress(event) {
+    if (event.key === 'Enter') {
+        const navSearchInput = document.getElementById('nav-search-input');
+        const search = navSearchInput.value.trim();
+        loadPhotos(1, search);
+    }
+}
+
 // Open photo modal
 async function openPhotoModal(photoId) {
     try {
@@ -322,6 +331,31 @@ function showLoading(show) {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadPhotos();
+    
+    // Setup search icon toggle
+    const searchToggle = document.getElementById('search-toggle');
+    const searchContainer = searchToggle?.parentElement;
+    const navSearchInput = document.getElementById('nav-search-input');
+    
+    if (searchToggle && searchContainer && navSearchInput) {
+        searchToggle.addEventListener('click', () => {
+            searchContainer.classList.toggle('expanded');
+            if (searchContainer.classList.contains('expanded')) {
+                navSearchInput.focus();
+            }
+        });
+
+        // Keep expanded when input has focus
+        navSearchInput.addEventListener('focus', () => {
+            searchContainer.classList.add('expanded');
+        });
+
+        navSearchInput.addEventListener('blur', () => {
+            if (!navSearchInput.value.trim()) {
+                searchContainer.classList.remove('expanded');
+            }
+        });
+    }
     
     // Check for photo ID in URL
     const urlParams = new URLSearchParams(window.location.search);
